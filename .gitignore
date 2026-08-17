@@ -139,3 +139,14 @@ dmypy.json
 # nbdime Stuff
 .gitattributes
 
+data/processed/Train_cleaned.csv
+.gitignore
+data
+data/raw/Train.csv
+data/raw/Test.csv
+data/airport_volume_airport_locations.csv
+drafts/data_cleaning.ipynb
+drafts/flight_routes_50.html
+drafts/flight_routes.html
+drafts/models.ipynb
+drafts/rotation_map.html
