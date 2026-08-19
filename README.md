@@ -19,20 +19,13 @@ The goal is to support airline operations in identifying recurring bottlenecks, 
 
 ## Business Problem
 
-Flight delays can affect:
+Flight delays can affect aircraft use, crew scheduling, airport operations, passenger connections, customer satisfaction, operational costs.
 
-- aircraft utilization
-- crew scheduling
-- airport operations
-- passenger connections
-- customer satisfaction
-- operational costs
-
-The objective of this project is to use historical flight information to identify patterns associated with delays and build predictive models that can support more proactive operational decision-making.
+The objective of this project is to use flight record to identify patterns associated with delays and build predictive models that can support more proactive operational decision-making.
 
 ### Main Question
 
-> **Can historical flight and schedule information be used to predict flight delays and estimate their duration?**
+> **Can we use flight record to predict flight delays and estimate their duration?**
 
 ---
 
@@ -51,33 +44,45 @@ The target variable is:
 The dataset includes information related to flight schedules, departure and arrival airports, aircraft, routes, dates, and other operational characteristics.
 
 ---
-
-
-## Repository Structure
+### Repository structure summary
 
 ```text
 .
-├── 01_data_cleaning.ipynb
-├── 02_EDA.ipynb
+├── data/
+│   ├── raw/
+│   │   ├── Train.csv
+│   │   └── Test.csv
+│   │
+│   └── Train_cleaned.csv
+│
+├── 01_datacleaning.ipynb
+├── 02_eda.ipynb
 ├── 03_models.ipynb
-└── 04_test_prediction.ipynb
-```
-
+├── 04_prediction_test.ipynb
+│
+├── models
+│   ├──final_hgbrt_model.pkl
+├── flight_delay_predictions.csv
+├── assets (EDA images and outputs)
+├── template (files from template repository)
+├── Flight_delay_challenge
+└── README.md
+````
 ### Notebook Workflow
 
 The notebooks should be run in order:
 
-1. **`01_data_cleaning.ipynb`**  
-   Clean and prepare the raw flight data before any analysis or modeling.
+1. [Data cleaning and feature engineering](01_datacleaning.ipynb)  
+   Clean and prepare the raw flight data before any analysis or modeling. Includes final feature engineering to create a clean and ready to model train dataset.
 
-2. **`02_EDA.ipynb`**  
-   Explore the cleaned data, investigate the target distribution, identify temporal patterns, study delays by airports and routes, and generate insights that guide feature engineering.
+2. [Exploratory Data Analysis](02_EDA.ipynb)  
+   Explore the cleaned data, investigate the target distribution, identify temporal patterns, study delays by airports and routes, and generate insights that guide feature engineering. Figures are stored in the folder [assets](assets)
 
-3. **`03_model_development.ipynb`**  
-   Use the cleaned and engineered data to train, compare, and evaluate the machine learning models.
+3. [Models development](03_model_development.ipynb)  
+   Use the cleaned and engineered data to train, compare, and evaluate the machine learning models. Final selected model is saved in the folder [models](models)
 
-4. **`04_test.ipynb`**  
-   Apply the selected final model to unseen/test data and evaluate or generate final predictions.
+4. [Testing prediction model](04_test.ipynb)  
+   Apply the selected final model to unseen/test data and evaluate or generate final predictions. This notebook includes the data cleaning and feature engineering to test the final model. 
 
 The project therefore follows the sequence:
 
@@ -96,9 +101,7 @@ Final Model
    ↓
 Testing / Prediction
 ```
-
 ---
-
 ## Project Workflow
 
 The project follows a standard machine learning workflow:
@@ -107,14 +110,19 @@ The project follows a standard machine learning workflow:
 2. Exploratory Data Analysis (EDA)
 3. Temporal and operational feature engineering
 4. Train/test preparation
-5. Baseline regression modeling
-6. Non-linear ensemble modeling
-7. Model comparison
-8. Feature importance analysis
+5. Baseline: Ridge Regression (Linear regression L2)
+6. Second model: Ridge Regression with Splines
+7. Final model: Histogram Gradient Boosting Regression Tree
+8. Model comparison & feature importance analysis
 9. Evaluation and stakeholder interpretation
+---
+## Project presentation
+
+A summary of the project, including the challenge, exploratory analysis, model comparison, key findings, and stakeholder recommendations, is available in the project presentation.
+
+- [Flight Delay Prediction Presentation](Flight_delay_challenge.pdf)
 
 ---
-
 ## Exploratory Data Analysis
 
 The EDA showed that flight delays are strongly right-skewed:
@@ -277,13 +285,7 @@ The next development steps should focus on adding information that better repres
 
 ### 1. Airport Size and Operational Capacity
 
-Add information about airport characteristics, such as:
-
-- airport size
-- number of terminals or runways
-- passenger or flight volume
-- operational capacity
-- congestion level
+Add information about airport characteristics, such as, airport size, number of terminals or runways, passenger or flight volume, operational capacity, congestion level.
 
 This could help explain why flights from some airports are more prone to delays than others.
 
@@ -291,29 +293,13 @@ This could help explain why flights from some airports are more prone to delays 
 
 Integrate historical weather data for departure and arrival airports.
 
-Potential variables include:
-
-- precipitation
-- wind speed
-- visibility
-- storms
-- temperature
-- severe weather conditions
-
 Weather information could be particularly valuable for understanding and predicting **extreme delay events** that cannot be explained by schedule information alone.
 
 ### 3. Time-Series Analysis
 
 Implement a dedicated time-series analysis to better model the temporal dependence observed in the data.
 
-This could help investigate:
-
-- daily delay cycles
-- weekly patterns
-- seasonal effects
-- delay accumulation during the day
-- recurring periods of congestion
-- changes in delay behavior over time
+This could help investigate daily delay cycles, weekly patterns, seasonal effects, delay accumulation during the day, recurring periods of congestion, changes in delay behavior over time, etc.
 
 Time-series methods could complement the current machine learning models by explicitly modeling how delay behavior evolves over time.
 
@@ -321,11 +307,7 @@ Time-series methods could complement the current machine learning models by expl
 
 Because very long delays are rare, future work could explore a separate model specifically designed for extreme events.
 
-This could include:
-
-- classifying flights into normal and extreme-delay groups
-- training a specialized model for extreme delays
-- using alternative loss functions that give more weight to rare large errors
+This could include: classifying flights into normal and extreme-delay groups, training a specialized model for extreme delays, using alternative loss functions that give more weight to rare large errors
 
 ---
 
@@ -343,6 +325,11 @@ For airline stakeholders, the greatest value of the model is therefore not neces
 
 ## Main Data Source
 
-Zindi — TunisAir Flight Delay Prediction Challenge
+[Zindi — TunisAir Flight Delay Prediction Challenge](https://zindi.world/competitions/flight-delay-prediction-challenge)
+
+### Other Data Sources
+- [Basic Airport Information](https://pypi.org/project/airportsdata/)
+- [Airport Volume Information](https://datacatalog.worldbank.org/search/dataset/0038117/global-airports)
+
 
 ---
